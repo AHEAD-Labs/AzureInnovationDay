@@ -1,0 +1,368 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "transitVMName": {
+            "defaultValue": "TransitVM",
+            "type": "string"
+        },
+        "webVMName": {
+            "defaultValue": "WebVM",
+            "type": "string"
+        },
+        "VMSize": {
+            "defaultValue": "Standard_B1s",
+            "type": "string"
+        },
+        "transitVnetName": {
+            "defaultValue": "TransitVNet",
+            "type": "string"
+        },
+        "webVnetName": {
+            "defaultValue": "WebVNet",
+            "type": "string"
+        },
+        "webNSGName": {
+            "defaultValue": "WebNSG",
+            "type": "string"
+        },
+        "dataNSGName": {
+            "defaultValue": "DataNSG",
+            "type": "string"
+        },
+        "webVMPublicIP": {
+            "defaultValue": "webVMPublicIP",
+            "type": "string"
+        },
+        "transitSubnetName": {
+            "defaultValue": "transit",
+            "type": "string"
+        },
+        "webSubnetName": {
+            "defaultValue": "web",
+            "type": "string"
+        },
+        "dataSubnetName": {
+            "defaultValue": "data",
+            "type": "string"
+        },
+        "webVnetPrefix": {
+            "defaultValue": "172.20.0.0/28",
+            "type": "string"
+        },
+        "webSubnetPrefix": {
+            "defaultValue": "172.20.0.0/29",
+            "type": "string"
+        },
+        "dataSubnetPrefix": {
+            "defaultValue": "172.20.0.8/29",
+            "type": "string"
+        },
+        "TransitVnetPrefix": {
+            "defaultValue": "172.20.0.16/28",
+            "type": "string"
+        },
+        "TransitSubnetPrefix": {
+            "defaultValue": "172.20.0.16/29",
+            "type": "string"
+        },
+        "TestVMUsername": {
+            "defaultValue": "lab.admin",
+            "type": "string"
+        },
+        "TestVMPassword": {
+            "defaultValue": "Innovate2018!",
+            "type": "securestring"
+        }
+    },
+    "variables": {
+        "transitVnetID": "[resourceId('Microsoft.Network/virtualNetworks', parameters('transitVnetName'))]",
+        "transitSubnetRef": "[concat(variables('transitVnetID'),'/subnets/', parameters('transitSubnetName'))]",
+        "webVnetID": "[resourceId('Microsoft.Network/virtualNetworks', parameters('webVnetName'))]",
+        "webSubnetRef": "[concat(variables('webVnetID'),'/subnets/', parameters('webSubnetName'))]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2015-06-15",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "name": "[parameters('webVMPublicIP')]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "publicIPAllocationMethod": "Dynamic"
+            }
+        },
+        {
+            "apiVersion": "2017-03-01",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('dataNSGName')]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "Allow_Port_1433",
+                        "properties": {
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "1433",
+                            "sourceAddressPrefix": "[parameters('webVnetPrefix')]",
+                            "destinationAddressPrefix": "[parameters('dataSubnetPrefix')]",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "apiVersion": "2017-03-01",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('webNSGName')]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "Allow_Inbound_3389",
+                        "properties": {
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "3389",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "name": "[parameters('webVnetName')]",
+            "apiVersion": "2015-06-15",
+            "dependsOn": [
+                "[parameters('dataNSGName')]",
+                "[parameters('webNSGName')]"
+            ],
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('webVNetPrefix')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[parameters('webSubnetName')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('webSubnetPrefix')]",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups/', parameters('webNSGName'))]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "[parameters('dataSubnetName')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('dataSubnetPrefix')]",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('dataNSGName'))]"
+                            }
+                        }
+                    }
+                ]
+            },
+            "resources": [
+                {
+                    "apiVersion": "2016-06-01",
+                    "type": "virtualNetworkPeerings",
+                    "name": "WebToTransitPeering",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                        "[concat('Microsoft.Network/virtualNetworks/', parameters('webVnetName'))]",
+                        "[concat('Microsoft.Network/virtualNetworks/', parameters('transitVnetName'))]"
+                    ],
+                    "properties": {
+                        "allowVirtualNetworkAccess": "true",
+                        "allowForwardedTraffic": "false",
+                        "allowGatewayTransit": "false",
+                        "useRemoteGateways": "false",
+                        "remoteVirtualNetwork": {
+                            "id": "[resourceId('Microsoft.Network/virtualNetworks',parameters('transitVnetName'))]"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "name": "[parameters('transitVnetName')]",
+            "apiVersion": "2015-06-15",
+            "dependsOn": [],
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('TransitVNetPrefix')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[parameters('transitSubnetName')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('TransitSubnetPrefix')]"
+                        }
+                    }
+                ]
+            },
+            "resources": [
+                {
+                    "apiVersion": "2016-06-01",
+                    "type": "virtualNetworkPeerings",
+                    "name": "TransitToWebPeering",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                        "[concat('Microsoft.Network/virtualNetworks/', parameters('transitVnetName'))]",
+                        "[concat('Microsoft.Network/virtualNetworks/', parameters('webVnetName'))]"
+                    ],
+                    "properties": {
+                        "allowVirtualNetworkAccess": "true",
+                        "allowForwardedTraffic": "false",
+                        "allowGatewayTransit": "false",
+                        "useRemoteGateways": "false",
+                        "remoteVirtualNetwork": {
+                            "id": "[resourceId('Microsoft.Network/virtualNetworks',parameters('webVnetName'))]"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[concat(parameters('webVMName'),'-nic-01')]",
+            "apiVersion": "2016-03-30",
+            "dependsOn": [
+                "[parameters('webVnetName')]",
+                "[parameters('webVMPublicIP')]"
+            ],
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses',parameters('webVMPublicIP'))]"
+                            },
+                            "subnet": {
+                                "id": "[variables('webSubnetRef')]"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[concat(parameters('transitVMName'),'-nic-01')]",
+            "apiVersion": "2016-03-30",
+            "dependsOn": [
+                "[parameters('webVnetName')]"
+            ],
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "[variables('transitSubnetRef')]"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[parameters('transitVMName')]",
+            "apiVersion": "2016-04-30-preview",
+            "dependsOn": [
+                "[concat(parameters('transitVMName'),'-nic-01')]"
+            ],
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "[parameters('VMSize')]"
+                },
+                "osProfile": {
+                    "computerName": "[parameters('transitVMName')]",
+                    "adminUsername": "[parameters('TestVMUsername')]",
+                    "adminPassword": "[parameters('TestVMPassword')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "Canonical",
+                        "offer": "UbuntuServer",
+                        "sku": "16.04-LTS",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "name": "[concat(parameters('transitVMName'), '-os-disk')]",
+                        "caching": "ReadWrite",
+                        "createOption": "FromImage"
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('transitVMName'), '-nic-01'))]"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[parameters('webVMName')]",
+            "apiVersion": "2016-04-30-preview",
+            "dependsOn": [
+                "[concat(parameters('webVMName'),'-nic-01')]"
+            ],
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "[parameters('VMSize')]"
+                },
+                "osProfile": {
+                    "computerName": "[parameters('webVMName')]",
+                    "adminUsername": "[parameters('TestVMUsername')]",
+                    "adminPassword": "[parameters('TestVMPassword')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsServer",
+                        "offer": "WindowsServer",
+                        "sku": "2016-Datacenter",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "name": "[concat(parameters('webVMName'), '-os-disk')]",
+                        "caching": "ReadWrite",
+                        "createOption": "FromImage"
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('webVMName'), '-nic-01'))]"
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}
