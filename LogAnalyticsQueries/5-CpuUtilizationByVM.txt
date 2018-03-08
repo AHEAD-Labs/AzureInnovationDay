@@ -1,0 +1,5 @@
+Perf
+| where TimeGenerated > ago(1d)
+| where CounterName == @"% Processor Time"
+| summarize avg(CounterValue) by Computer, bin(TimeGenerated, 15m) 
+| render timechart

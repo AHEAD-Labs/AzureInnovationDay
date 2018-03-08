@@ -1,0 +1,117 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vnetName": {
+            "defaultValue": "TransitVNet",
+            "type": "String"
+        },
+        "TransitVnetPrefix": {
+            "defaultValue": "172.254.0.0/16",
+            "type": "String"
+        },
+        "TransitSubnetPrefix": {
+            "defaultValue": "172.254.1.0/24",
+            "type": "String"
+        },
+        "TestVMUsername": {
+            "defaultValue": "lab.admin",
+            "type": "String"
+        },
+        "TestVMPassword": {
+            "defaultValue": "Innovate2018!",
+            "type": "SecureString"
+        }
+    },
+    "variables": {
+        "vnetNameVar": "[parameters('vnetName')]",
+        "vnetID": "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetNameVar'))]",
+        "subnetRef": "[concat(variables('vnetID'),'/subnets/transit')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "name": "[variables('vnetNameVar')]",
+            "apiVersion": "2015-06-15",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('TransitVNetPrefix')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "transit",
+                        "properties": {
+                            "addressPrefix": "[parameters('TransitSubnetPrefix')]"
+                        }
+                    }
+                ]
+            },
+            "dependsOn": []
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "myTestVMNic",
+            "apiVersion": "2016-03-30",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "[variables('subnetRef')]"
+                            }
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[variables('vnetNameVar')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "transitTestVM",
+            "apiVersion": "2016-04-30-preview",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_B1s"
+                },
+                "osProfile": {
+                    "computerName": "transitTestVM",
+                    "adminUsername": "[parameters('TestVMUsername')]",
+                    "adminPassword": "[parameters('TestVMPassword')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "Canonical",
+                        "offer": "UbuntuServer",
+                        "sku": "16.04-LTS",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "name": "myManagedOSDisk",
+                        "caching": "ReadWrite",
+                        "createOption": "FromImage"
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces','myTestVMNic')]"
+                        }
+                    ]
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces/', 'myTestVMNic')]"
+            ]
+        }
+    ]
+ }
+ 

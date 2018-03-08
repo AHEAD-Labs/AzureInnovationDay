@@ -1,0 +1,5 @@
+Perf
+| where TimeGenerated > ago(1h)
+| where Computer == "VMNAME"
+| where CounterName == "% Free Space"
+| summarize min(CounterValue) by InstanceName

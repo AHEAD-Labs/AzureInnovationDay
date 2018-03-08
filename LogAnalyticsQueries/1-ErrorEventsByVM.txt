@@ -1,0 +1,4 @@
+Event
+| where (EventLevelName == "Error")
+| where (TimeGenerated > ago(1days))
+| summarize ErrorCount = count() by Computer
