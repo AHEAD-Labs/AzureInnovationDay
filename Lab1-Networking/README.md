@@ -1,6 +1,6 @@
-#Create and Manage Virtual Networking
+# Create and Manage Virtual Networking
 
-##Create a Resource Group
+## Create a Resource Group
 A Resource Group is a container used to organize your Azure resources. You can control access and manage billing of Resource Groups or use them to logically separate like resources (i.e. all resources relevant to a specific application).
 
 We will start by creating a Resource Group to be used throughout the labs. All resources can be deployed to this same Resource Group.
@@ -12,7 +12,7 @@ We will start by creating a Resource Group to be used throughout the labs. All r
 5. Select your subscription
 6. Select region, we recommend Central US for the purposes of this demo
 
-##Create a VNet
+## Create a VNet
 A VNet is the basic container for all Azure networking. It is simply a root address space in a given location.
 
 1. In the Search box type “Virtual Networks” and click the link (be sure not to click the link with “Classic” in the title)
@@ -28,7 +28,7 @@ A VNet is the basic container for all Azure networking. It is simply a root addr
 
 
 
-##Create an additional subnet
+## Create an additional subnet
 1. Select “Subnets” from the Vnet menu
 2. Click +Subnet
     a. Enter “data” for name
@@ -63,7 +63,7 @@ NSGs are essentially stateful firewalls. We are going to create an NSG between W
 11. Choose your VNet and then the “Web” Subnet
 12. Click OK
 
-##Create a Second NSG
+## Create a Second NSG
 1. Click the +Add button on the Network Security Groups Blade
     a. Name: WebToData
     b. Resource Group: Use your existing
@@ -86,7 +86,7 @@ NSGs are essentially stateful firewalls. We are going to create an NSG between W
 6. Select your VNet and the Data subnet
 7. Click OK
 
-##Create a second VNet and Subnet using a Template
+## Create a second VNet and Subnet using a Template
 This template will create a “TransitVNet” with “Transit” Subnet, and a Ubuntu VM in that subnet which we will use for testing.
 1. Click +Create a Resource
 2. In the search box type “template” and select “Template Deployment”
@@ -104,7 +104,7 @@ This template will create a “TransitVNet” with “Transit” Subnet, and a U
 8. Click the “I agree…” checkbox and then Purchase (note, cost will be negligible)
 9. This will use the template to deploy a transit VNet and subnet for use in the next section.
 
-##Setup VNet Peering with transit VNet
+## Setup VNet Peering with transit VNet
 1. Click Virtual Networks on the left and select your VNet
 2. Click the “Peerings” link
 3. Click +Add

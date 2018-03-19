@@ -1,7 +1,8 @@
-Host Level Metrics
+# Azure Monitoring and Operations
+
+## Host Level Metrics
 We are going to create our first Web Server VM using the Azure Portal.
 
-Log into https://portal.azure.com with your credentials.
 Click “All Services” in the top left corner, search for and click on “Monitor”
 Under the “Shared Services” section, click on “Metrics”
 A selection pane will show at the top to choose the following:
@@ -16,9 +17,7 @@ Click the pin off on the right hand side.
 Navigate back to the dashboard 
 
 
-
-
-Create Log Analytics Workspace
+## Create Log Analytics Workspace
 Navigate to “Log Analytics” within the Azure portal
 Click “+ Add” to create a new Log Analytics workspace
 Specify the workspace name, subscription, Resource Group, and Location, then click Create to provision your new workspace
@@ -34,7 +33,7 @@ Click “Save” at the top bar
 
 
 
-Configure Data Source for Log Analytics
+## Configure Data Source for Log Analytics
 Navigate back to your Log Analytics workspace and find the “Workspace Data Sources” settings
 Choose “Virtual Machines”
 Click on your Virtual Machine
@@ -43,7 +42,7 @@ Another blade will open and you can click “Connect” to configure the OMS Age
 Once provisioned, the VM will show connected to your workspace
 
 
-Log Analytics Queries
+## Log Analytics Queries
 From the Log Analytics “OMS Workspace” click “Log Search”
 Once the Log Search blade is open, Azure provides some information about the Log Analytics query language structure and a built-in query editor.
 
@@ -85,7 +84,7 @@ Perf
 
 
 
-Configure Just in Time Access On a VM
+## Configure Just in Time Access On a VM
 Just in time VM Access is only available on Virtual Machines that have a Public IP and Network Security Group configured.
 Navigate to “Security Center” within the Azure portal
 Under the “Advanced Cloud Defense” section, click on “Just in time VM access”

@@ -1,4 +1,6 @@
-Create Azure Storage Account 
+# Azure Storage
+
+## Create Azure Storage Account 
 Click ‘Create a Resource’ (plus icon) in the top left corner.
 Click ‘Storage’ → ‘Storage Account’
 Enter a name for your storage account (It must be unique and lower case). See following picture for additional settings. Select the resource group you created in the previous lab. 

@@ -1,6 +1,6 @@
-#Create and Manage Azure VMs
+# Create and Manage Azure VMs
 
-##Create an Azure VM with the Portal
+## Create an Azure VM with the Portal
 We are going to create our first Web Server VM using the Azure Portal.
 
 Log into https://portal.azure.com with your credentials.
@@ -23,7 +23,7 @@ Configure Optional Features
 On the Create screen click “Create”
 You will be redirected to your Dashboard where you will see a tile for your new VM. Wait a few minutes for the VM to finish provisioning.
 
-Connect to web-vm-1
+## Connect to web-vm-1
 Once the provisioning process is complete, click the tile for the VM if you are not automatically redirected.
 Click the Connect button. You will see Microsoft Remote Desktop open, or on a Mac you will get a download link for a .rdp file.
 Open the .rdp file and enter the credentials you used when creating the VM. Mac users: you will need to have Microsoft RDP installed (link)
