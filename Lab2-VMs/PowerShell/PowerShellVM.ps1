@@ -3,4 +3,5 @@ New-AzureRmVM `
 -Name "web-vm-2" `
 -Location "LOCATION" `
 -VirtualNetworkName "YOURVNET" `
--SubnetName "web" 
+-SubnetName "web" `
+-AvailabilitySetName "YOURAVAILABILITYSETNAME”
