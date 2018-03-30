@@ -1,9 +1,10 @@
-# Azure Storage
-
-## Create Azure Storage Account 
+Create Azure Storage Account 
 Click ‘Create a Resource’ (plus icon) in the top left corner.
 Click ‘Storage’ → ‘Storage Account’
-Enter a name for your storage account (It must be unique and lower case). See following picture for additional settings. Select the resource group you created in the previous lab. 
+Enter a name for your storage account (It must be unique and lower case). 
+Ensure that “Account kind” is set to “StorageV2”
+Replication should be set to “Locally-redundant storage (LRS)”
+ 
 
 Click Create
 Once provisioning has completed, navigate to the resource by clicking “Go to resource”
@@ -13,7 +14,7 @@ https://goo.gl/QZLgyY , https://goo.gl/NDfAkc , https://goo.gl/vQcxFV
 
 Use Storage Explorer to Browse Storage Account
 From a browser, search “azure storage explorer” or browse to: https://azure.microsoft.com/en-us/features/storage-explorer/ , and download Storage Explorer.
-Install and log in with your credentials. You’ll now be able to see your blobs.
+Install Storage Explorer and log in with your credentials. You’ll be able to browse the Storage Account created above and view your blobs.
 
 
 

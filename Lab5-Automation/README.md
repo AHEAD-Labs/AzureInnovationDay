@@ -9,4 +9,4 @@ A window will open warning you of the resources you are about to remove
 Type the name of your Resource Group to confirm deletion and then click “Delete” at the bottom of the window
 
 ## Recreate your Resource Group and Resources
-Instructor will provide the automation script and ARM Template to recreate the environment.
+From the AzureInnovationDays GitHub Repository, navigate to the “Lab5-Automation” folder. Within the “Recreate-Environment” folder, find the azuredeploy.json ARM Template. Deploy this ARM Template to your Azure environment.
