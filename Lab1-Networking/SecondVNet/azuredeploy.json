@@ -7,11 +7,11 @@
             "type": "String"
         },
         "TransitVnetPrefix": {
-            "defaultValue": "172.254.0.0/16",
+            "defaultValue": "172.17.0.0/16",
             "type": "String"
         },
         "TransitSubnetPrefix": {
-            "defaultValue": "172.254.1.0/24",
+            "defaultValue": "172.17.0.0/24",
             "type": "String"
         },
         "TestVMUsername": {
@@ -53,7 +53,7 @@
         },
         {
             "type": "Microsoft.Network/networkInterfaces",
-            "name": "myTestVMNic",
+            "name": "TransitVMNic",
             "apiVersion": "2016-03-30",
             "location": "[resourceGroup().location]",
             "properties": {
@@ -75,7 +75,7 @@
         },
         {
             "type": "Microsoft.Compute/virtualMachines",
-            "name": "transitTestVM",
+            "name": "TransitVM",
             "apiVersion": "2016-04-30-preview",
             "location": "[resourceGroup().location]",
             "properties": {
@@ -83,7 +83,7 @@
                     "vmSize": "Standard_B1s"
                 },
                 "osProfile": {
-                    "computerName": "transitTestVM",
+                    "computerName": "TransitVM",
                     "adminUsername": "[parameters('TestVMUsername')]",
                     "adminPassword": "[parameters('TestVMPassword')]"
                 },
@@ -95,7 +95,7 @@
                         "version": "latest"
                     },
                     "osDisk": {
-                        "name": "myManagedOSDisk",
+                        "name": "TransitVMOSDisk",
                         "caching": "ReadWrite",
                         "createOption": "FromImage"
                     }
@@ -103,13 +103,13 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces','myTestVMNic')]"
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces','TransitVMNic')]"
                         }
                     ]
                 }
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkInterfaces/', 'myTestVMNic')]"
+                "[resourceId('Microsoft.Network/networkInterfaces/', 'TransitVMNic')]"
             ]
         }
     ]
