@@ -11,64 +11,64 @@ We will start by creating a Resource Group to be used throughout the labs. All r
 5. Select your subscription
 6. Select region, we recommend Central US for the purposes of this demo
 
-## Create a VNet
+## Create a Virtual Network (VNet)
 
 A VNet is the basic container for all Azure networking. It is simply a root address space in a given location.
 
-1. Click "All services", then in the Search box type "Virtual Networks" and click the link (be sure **not** to click the link with "Classic" in the title)
-2. Click the +Add button
+1. Within the newly created Resource Group, click "Create", then in the search box type "Virtual Networks". 
+2. Click "Create" -> "Virtual Network" 
 3. Fill in the details to create a VNet:
-  1. Input [lastname]VNet as the name
-  2. Use your existing [lastname]ResourceGroup you created previously
-  3. Create a default subnet named "web"
+  1. Select a Subscription & use your existing [lastname]ResourceGroup you created previously (this should autopopulate, but be sure to verify)
+  2. Input [lastname]VNet as the name
+  3. Input "Central US" as the Region and click "Next: IP Addresses"
   4. Set the VNet address space to 172.16.0.0/16
-  5. Under "Subnet" you will assign your first subnet, named "web"
-  6. Set the Web subnet address space to 172.16.0.0/24.
-  7. Click Create
+  5. Click "Add Subnet", here you will assign your first subnet, named "web"
+  6. Set the Web subnet address space to 172.16.0.0/24, and click "Add"
+  7. Select "Review + Create", then "Create"
 
 4. Once complete a notification should pop up in the top-right of the portal letting you know the deployment has completed. From the notification, click "Go to Resource"
 
 ## Create an additional subnet
 
-1. Select "Subnets" from the Vnet menu
-
-1. Click +Subnet
-  1. Enter "data" for name
-  2. Enter 172.16.1.0/24 for the address range
-  3. Click Ok
-2. You will see the additional subnet appear in the subnets list
+1. Within your newly created Virtual Network, select "Subnets" under settings on the overview blade.
+ 2. Click +Subnet
+    1. Enter "data" for name
+    2. Enter 172.16.1.0/24 for the address range
+    3. Click "Save"
+ 3. You will see the additional subnet appear in the subnets list
 
 ## Create Network Security Groups
 
 NSGs are essentially stateful firewalls. We are going to create an NSG between Web and Data, as well as one from the public into Web.
 
-1. In the Search box enter "Network Security Groups" and click the link (note, **not** the 'Classic' link)
-2. Click the +Add button
+1. Within your Resource Group, click "Create", then in the search box type "Network Security Groups".
+2. Click "Create" -> "Network Security Group". 
 3. Enter the following values in the creation blade:
-  1. Name: webPubNSG
-  2. Resource Group: Use Existing - your previously created RG
-  3. Click Create
+   1. Select a Subscription & use your existing [lastname]ResourceGroup you created previously (this should autopopulate, but be sure to verify)
+   2. Name: webPubNSG
+   3. Resource Group: Use Existing - your previously created RG
+   4. Click "Review + Create", then "Create"
 4. Once created, click "Go To Resource" or select your new NSG from the list
 5. Click "Inbound Security Rules" and note the default rules permitting all traffic within the VNet.
 6. Click +Add to create a new rule
 7. Enter the following details:
-  1. Source: Any
-  2. Source Port Groups: \*
-  3. Destination: Any
-  4. Destination Port Groups: 80,443,3389
-  5. Protocol: TCP
-  6. Action: Allow
-  7. Priority: 100
-  8. Name: Default\_Web
-8. Click OK
-9. Once finished, click the "Subnets" link
+   1. Source: Any
+   2. Source Port Groups: \*
+   3. Destination: Any
+   4. Destination Port Groups: 80,443,3389
+   5. Protocol: TCP
+   6. Action: Allow
+   7. Priority: 100
+   8. Name: Default\_Web
+8. Click "Add"
+9. Once finished, click "Subnets" under Settings 
 10. Click +Associate
 11. Choose your VNet and then the "Web" Subnet
 12. Click OK
 
 ## Create a Second NSG
 
-1. Click the +Add button on the Network Security Groups Blade
+1. Once again, click the "Create" button on the Network Security Groups Blade
   1. Name: WebToData
   2. Resource Group: Use your existing
   3. Create
@@ -84,10 +84,10 @@ NSGs are essentially stateful firewalls. We are going to create an NSG between W
   8. Action: Allow
   9. Priority: 100
   10. Name: Port\_1433
-  11. Click OK
-4. Click the Subnets Link
+  11. Click "Add"
+4. Once finished, click "Subnets" under Settings
 5. Click +Associate
-6. Select your VNet and the Data subnet
+6. Select your VNet and the "data" subnet
 7. Click OK
 
 ## Create a second VNet and Subnet using a Template
