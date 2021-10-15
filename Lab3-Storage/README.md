@@ -3,14 +3,14 @@
 1. Click 'Create a Resource' (plus icon) in the top left corner.
 2. Click 'Storage' -> 'Storage Account'
 3. Enter a name for your storage account (It must be unique and lower case).
-  1. Ensure that "Account kind" is set to "StorageV2"
-  2. Replication should be set to "Locally-redundant storage (LRS)"
-4. Click Create
+   1. Ensure that "Performance" is set to Standard (general-purpose v2 account)
+   2. Redundancy should be set to "Locally-redundant storage (LRS)"
+4. Click "Review + Create", then "Create".
 5. Once provisioning has completed, navigate to the resource by clicking "Go to resource"
-6. Click 'Blobs', and then click "Add Container" (Plus sign) near the top. Enter a name and set it to 'Private'
+6. Click 'Containers' (blob), and then click "Add Container" (Plus sign) near the top. Enter a name and set it to 'Private'
 7. Select your container and click 'Upload'. Upload these 3 files by pasting the link into the upload dialog: (You'll have to download these manually if you're on a Mac.)
 
-[https://goo.gl/QZLgyY](https://goo.gl/QZLgyY) , [https://goo.gl/NDfAkc](https://goo.gl/NDfAkc) , [https://goo.gl/vQcxFV](https://goo.gl/vQcxFV)
+[https://goo.gl/QZLgyY](https://goo.gl/QZLgyY), [https://goo.gl/NDfAkc](https://goo.gl/NDfAkc) , [https://goo.gl/vQcxFV](https://goo.gl/vQcxFV)
 
 ## Use Storage Explorer to Browse Storage Account
 
