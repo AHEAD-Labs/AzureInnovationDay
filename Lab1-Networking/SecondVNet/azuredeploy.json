@@ -19,7 +19,7 @@
             "type": "String"
         },
         "TestVMPassword": {
-            "defaultValue": "Innovate2018!",
+            "defaultValue": "Innovate2021!",
             "type": "SecureString"
         }
     },
