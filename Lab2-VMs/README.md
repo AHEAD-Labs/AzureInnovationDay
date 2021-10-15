@@ -35,9 +35,9 @@ We are going to create our first Web Server VM using the Azure Portal.
 4. Accept security warnings and click connect.
 5. Close the Server Manager window
 6. **TEST Connection between Web and Transit**
-  1. Open a cmd shell and run "ping 172.254.1.4"
-  2. Note, this should be your test VM IP address but you may have to view that VM and verify
-  3. If the peering was successful you should see a reply from your TestVM in your TransitVnet
+   1. Open a cmd shell and run "ping 172.254.1.4"
+   2. Note, this should be your test VM IP address but you may have to view that VM and verify
+   3. If the peering was successful you should see a reply from your TestVM in your TransitVnet
 
 ## Create an Azure VM with PowerShell
 
@@ -46,8 +46,8 @@ We are going to create our second Web Server VM with PowerShell. We are going to
 1. Open the cloud PowerShell console by clicking the powershell icon in the top right of the Azure Portal
 2. Select "PowerShell (Windows)"
 3. Choose the following:
-  3. Storage Account: Create New - (**must be lower case**) [lastname]storage
-  5. Click Create Storage
+   3. Storage Account: Create New - (**must be lower case**) [lastname]storage
+   5. Click Create Storage
 4. Once complete the shell should have loaded PowerShell and authenticated you to Azure.
 5. Run the following command to create a VM supplying your last name where appropriate
 
