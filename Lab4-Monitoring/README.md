@@ -3,9 +3,9 @@
 1. Search for and click on “Monitor"
 2. Under the Overview section, click on "Metrics"
 3. A selection pane will show at the top to choose the following:
-  1. Subscription - a list of available subscriptions, choose the relevant subscription where your VM is located
-  2. Resource Type - list of resources available within the resource group, choose Virtual Machines
-  3. Location - list of locations where resources have been deployed, choose where your VM is located. 
+   1. Subscription - a list of available subscriptions, choose the relevant subscription where your VM is located
+   2. Resource Type - list of resources available within the resource group, choose Virtual Machines
+   3. Location - list of locations where resources have been deployed, choose where your VM is located. 
 4. After selecting the parameters, the available host metrics will be shown on the left hand side in checkbox form
 5. Select your Virtual Machine and click "Apply". 
 6. Choose Metric as "Percentage CPU"
