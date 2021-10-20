@@ -1,4 +1,4 @@
-New-AzureRmVM `
+New-AzVM `
 -ResourceGroupName "YOURRESOURCEGROUP" `
 -Name "web-vm-2" `
 -Location "LOCATION" `
